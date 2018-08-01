@@ -71,9 +71,7 @@
                     
                     <fieldset>
                     <legend><b>Iniciar sesión</b></legend>
-                    <div id="formulario">
-                        <br/>
-                        <br/>
+                    <form name="login" action="/" method="POST">
                                             
                         <label for="emailsesion" id="email"><b>Email</b></label><br/>
                         <input type="text" id="emailsesion" name="emailsesion_txt" class="cambio"/>
@@ -87,11 +85,11 @@
                         <br/>
                         <br/>
                         
-                        <input type="button" id="ingresarsesion" name="ingresarsesion_btn" class="cambio" value="Ingresar"/>
+                        <input type="submit" id="ingresarsesion" name="ingresarsesion_btn" class="cambio" value="Ingresar"/>
                         <input type="button" id="limpiarsesion" name="limpiarsesion_btn" class="cambio" value="Limpiar"/><br/><br/>
                         
                         <p id="olvidecontraseña"><a href="olvidocontrase_a">Olvidé mi contraseña</a></p>
-                    </div>    
+                    </form>    
                     </fieldset> 
                     </form>
                 </section>

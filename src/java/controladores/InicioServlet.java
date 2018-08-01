@@ -1,21 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package controladores;
 
-import com.mysql.jdbc.Connection;
-import db.Conexion;
-import db.UsuarioSql;
+
+import modelos.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import modelos.Usuario;
 
 /**
  *
@@ -40,13 +40,10 @@ public class InicioServlet extends HttpServlet {
         
         RequestDispatcher rd = null;
         if (email != null) {
-            Conexion c = new Conexion();
-            Connection cnx = c.obtener();
-
-            UsuarioSql usql = new UsuarioSql();
-            Usuario u = usql.obtener_uno(cnx, email);
+            Usuario u = consultarUsuario(email);
 
             if(u != null && u.getClave().equals(contrasena)) {
+                u.setEmail(email);
                 HttpSession session = request.getSession(true);
                 session.setAttribute("email", email);
                 rd = request.getRequestDispatcher("jsp/inicio.jsp");
@@ -67,6 +64,35 @@ public class InicioServlet extends HttpServlet {
         
         
         rd.forward(request, response);
+    }
+    
+    
+    Usuario consultarUsuario(String email) {
+        Connection conexion = null;
+        Usuario u = new Usuario();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ejemplo", "root", "");
+            PreparedStatement ps = conexion.prepareStatement("SELECT * FROM usuario WHERE email = ?");
+            ResultSet resultados = ps.executeQuery();
+            while(resultados.next()) {
+                u.setNombre(resultados.getString("nombre"));
+                u.setClave(resultados.getString("clave"));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductoController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(conexion != null && !conexion.isClosed()) {
+                    conexion.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(InicioServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return u;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
