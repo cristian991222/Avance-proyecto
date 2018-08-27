@@ -52,7 +52,7 @@ public class Galeria extends HttpServlet {
         List<Imagen> listaImagenes = new ArrayList<Imagen>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/ejemplo", "root", "");
+            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/instaphoto", "root", "");
             PreparedStatement ps = conexion.prepareStatement("SELECT * FROM imagenes");
             ResultSet resultados = ps.executeQuery();
             while(resultados.next()) {

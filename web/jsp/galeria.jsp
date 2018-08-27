@@ -42,7 +42,6 @@
 
         <div class="elemento">
             <img src="<%= imagen.ruta %>">
-            <div><%= imagen.nombre %></div>
         </div>
         <%
         }%>
